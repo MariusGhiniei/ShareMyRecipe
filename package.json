@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.1",
-    "mongoose": "^6.10.0"
+    "mongoose": "^6.10.0",
+    "simple-encryptor": "^4.0.0"
   }
 }
