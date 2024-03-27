@@ -1,29 +1,36 @@
-const userModel = require('./userModel')
-const key = "key1234key567890"
-const encrypt = require('simple-encryptor')(key)
+const userModel = require('./userModel');
+const key = "key1234key567890";
+const encrypt = require('simple-encryptor')(key);
 
 module.exports.createUserDBService = (userDetails) => {
     return new Promise(function(resolve, reject) {
-        const userModelData = new userModel();
+        // Check if userDetails is defined
+        if (!userDetails) {
+            reject(new Error("User details are undefined"));
+            return;
+        }
 
-        userModelData.firstName = userDetails.firstName;
-        userModelData.lastName = userDetails.lastName;
-        userModelData.email = userDetails.email;
-        userModelData.country = userDetails.country;
-        userModelData.password = userDetails.password;
-        const encryptedPass = encrypt.encrypt(userDetails.password);
-        userModelData.password = encryptedPass;
+        const { firstName, lastName, email, country, password } = userDetails;
+
+        const userModelData = new userModel({
+            firstName,
+            lastName,
+            email,
+            country,
+            password: encrypt.encrypt(password) // Encrypt password before saving
+        });
 
         userModelData.save(function(error, result) {
             if (error) {
-                console.error("Error while creating user:", error); 
+                console.error("Error while creating user:", error);
                 reject(error);
             } else {
-                resolve(true); 
+                resolve(result); // Resolve with the created user data
             }
         });
     });
 };
+
 
 module.exports.loginUserDBService = (userDetails) => {
     return new Promise(function(resolve, reject) {

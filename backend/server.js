@@ -3,6 +3,12 @@ const app = express()
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 const routes = require('./routes/routes')
+const cors = require('cors')
+
+app.use(cors({
+    origin: "http://localhost:4200"
+}
+))
 app.use(express.json())
 
 app.listen(3000, function check(error){

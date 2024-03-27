@@ -1,27 +1,36 @@
-const userService = require('./userServices')
+const userService = require('./userServices');
 
 const createUserControllerFn = async (req, res) => {
-    try{
-        console.log(req.body)
-        const status = await userService.createUserDBService(req.body)
-        console.log(status)
+    try {
+        console.log("Request Body:", req.body);
+        
+        // Call createUserDBService from userService to create a new user
+        const status = await userService.createUserDBService(req.body);
 
-        if(status) res.send({
-            "status" : true,
-            "message" : "User created succesfully"
-        })
-        else res.send({
-            "status" : false,
-            "message" : "Error on creating user"
-        })
-    } catch(error) {
-        console.log(error)
-        res.status(500).send({
-            "status" : false, 
-            "message" : "Internal server error"
-        })
+        // Check the status returned by createUserDBService
+        if (status) {
+            // If user creation is successful, send a success response
+            return res.status(201).json({
+                status: true,
+                message: "User created successfully"
+            });
+        } else {
+            // If user creation fails, send an error response
+            return res.status(400).json({
+                status: false,
+                message: "Error creating user"
+            });
+        }
+    } catch (error) {
+        // If an error occurs during user creation or processing, log the error and send an internal server error response
+        console.error("Error creating user:", error);
+        return res.status(500).json({
+            status: false,
+            message: "Internal server error"
+        });
     }
-}
+};
+
 
 const loginUserControllerFn = async (req, res) => {
     try {
