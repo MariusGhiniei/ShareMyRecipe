@@ -34,11 +34,7 @@ const createUserControllerFn = async (req, res) => {
 
 const loginUserControllerFn = async (req, res) => {
     try {
-        console.log("Login Request Body:", req.body);
-
         const result = await userService.loginUserDBService(req.body);
-        console.log("Login Result:", result);
-
         if (result.status) {
             res.status(200).json({
                 status: true,
@@ -47,14 +43,14 @@ const loginUserControllerFn = async (req, res) => {
         } else {
             res.status(401).json({
                 status: false,
-                message: result.msg
+                message: result.msg // Provide a meaningful error message here
             });
         }
     } catch (error) {
         console.error("Login Error:", error);
         res.status(500).json({
             status: false,
-            message: "Internal server error",
+            message: "Internal server error"
         });
     }
 };
