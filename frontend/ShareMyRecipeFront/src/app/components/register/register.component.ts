@@ -40,7 +40,6 @@ export class RegisterComponent implements OnInit{
 
   submit() : void {
     let user = this.form.getRawValue()
-    console.log(user)
     
     if(user.firstName == "" || user.lastName == "" || user.country == "" || user.email == "" || user.password == ""){
       Swal.fire("Error", "Please enter all the fields", "error")
