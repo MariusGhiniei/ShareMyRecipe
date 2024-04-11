@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
+
 
 @Component({
   selector: 'app-register',
@@ -13,21 +14,24 @@ import Swal from 'sweetalert2'
 })
 export class RegisterComponent implements OnInit{
   form: FormGroup;
+  currentTab = 0
+  totalTabs = 5
 
   constructor(
     private formBuilder: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      firstName: "",
-      lastName: "",
-      country: "",
-      email: "",
-      password: ""
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      country: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
     })
+    //this.showTab(this.currentTab)
   }
 
   ValidateEmail = (email: any) => {
@@ -55,5 +59,13 @@ export class RegisterComponent implements OnInit{
         })
     }
   }
+
+  nextPrev(n: number): void {
+    this.currentTab += n
+  }
+  
+
+
+  
 
 }

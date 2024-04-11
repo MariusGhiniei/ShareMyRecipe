@@ -1,4 +1,76 @@
-<form [formGroup]="form" (submit) = "submit()">
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-md-8">
+            <form [formGroup]="form" id="regForm">
+                <h1 id="register">Register to my application</h1>
+                <div class="all-steps" id="all-steps"> 
+                    <span class="step" [class.active]="currentTab === 0" [class.finish]="currentTab > 0"><i class="fa fa-solid fa-user"></i></span>
+                    <span class="step" [class.active]="currentTab === 1" [class.finish]="currentTab > 1"><i class="fa fa-regular fa-user"></i></span>
+                    <span class="step" [class.active]="currentTab === 2" [class.finish]="currentTab > 2"><i class="fa fa-solid fa-globe"></i></span>
+                    <span class="step" [class.active]="currentTab === 3" [class.finish]="currentTab > 3"><i class="fa fa-solid fa-envelope"></i></span>
+                    <span class="step" [class.active]="currentTab === 4" [class.finish]="currentTab > 4"><i class="fa fa-key"></i></span>
+                </div>
+
+                <div class="tab" [hidden]="currentTab !== 0">
+                    <h6> What's your first name? </h6>
+                    <p>  
+                        <input formControlName = "firstName" class="form-control" placeholder="Alexandru"  name = "fname" required>
+                    </p>
+                </div>
+
+                <div class="tab" [hidden]="currentTab !== 1" >
+                    <h6> What's your last name? </h6>
+                    <p>
+                        <input formControlName = "lastName" class="form-control" placeholder="Popescu"  name = "lname" required>
+                    </p>
+                </div>
+
+                <div class="tab" [hidden]="currentTab !== 2">
+                    <h6> What's your country? </h6>
+                    <p>
+                        <input formControlName = "country" class="form-control" placeholder="Romania"  name = "country" required>
+                    </p>
+                </div>
+
+                <div class="tab" [hidden]="currentTab !== 3">
+                    <h6> What's your e-mail adress? </h6>
+                    <p>
+                        <input formControlName = "email" type = "email" class="form-control" placeholder="alexandru.popescu@gmail.com" name = "email" required>
+                    </p>
+                </div>
+
+                <div class="tab" [hidden]="currentTab !== 4">
+                    <h6> Choose your password! </h6>
+                    <p>
+                        <input formControlName = "password" type = "password" class="form-control" name = "password" required>
+                    </p>
+                </div>
+
+                <div style="overflow: auto;" id="nextprevious">
+                    <div style="float:right;">
+                        <button type="button" id="prevBtn" (click)="nextPrev(-1)" [hidden]="currentTab === 0" >
+                            <i class="fa fa-solid fa-arrow-left"></i>
+                        </button>
+                        
+                        <button type="button" id="nextBtn" (click)="nextPrev(1)" [hidden]="currentTab === (totalTabs - 1)">
+                            <i class="fa fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button type="button" (click) = "submit()"[hidden]="currentTab !== (totalTabs - 1)" > 
+                            <i class="fa fa-solid fa-arrow-right"></i>
+                        </button>
+                       
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- <form [formGroup]="form" (submit) = "submit()">
     <h1 class="h3 mb-3 fw-normal"> Register! </h1>
     <input formControlName = "firstName" class="form-control" placeholder="Alexandru" required>
     <input formControlName = "lastName" class="form-control" placeholder="Popescu" required>
@@ -8,4 +80,4 @@
 
     <button class="w-100 btn btn-lg btn-primary" type="submit"> Submit</button>
     
-</form>
+</form> -->
