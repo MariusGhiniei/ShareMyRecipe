@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit{
       Swal.fire("Error", "Please enter all the fields", "error")
     } else if (!this.ValidateEmail(user.email)){
       Swal.fire("Error", "Please enter a valid email address", "error")
+      console.log(user);
     } else {
       this.http.post("http://localhost:3000/api/login", user, { withCredentials: true})
       .subscribe(
