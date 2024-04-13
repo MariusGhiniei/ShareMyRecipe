@@ -44,7 +44,7 @@ export class FeedComponent implements OnInit {
         }
       );
 
-      this.http.get('http//localhost:300/api/post',{withCredentials: true})
+      this.http.get('http//localhost:3000/api/post',{withCredentials: true})
       .subscribe(
         (res:any) => {
           console.log(res);
