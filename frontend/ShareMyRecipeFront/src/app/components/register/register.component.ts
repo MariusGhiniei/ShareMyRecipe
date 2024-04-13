@@ -31,7 +31,6 @@ export class RegisterComponent implements OnInit{
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     })
-    //this.showTab(this.currentTab)
   }
 
   ValidateEmail = (email: any) => {

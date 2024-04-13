@@ -8,6 +8,9 @@ import { register } from 'module';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { routes } from './app.routes';
+import { PostComponent } from './components/post/post.component';
+import { PostModelComponent } from './components/post-model/post-model.component';
+import { FeedComponent } from './components/feed/feed.component';
 
 
 @Component({
@@ -22,7 +25,10 @@ import { routes } from './app.routes';
     NavComponent,
     HomeComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    PostComponent,
+    PostModelComponent,
+    FeedComponent
     ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

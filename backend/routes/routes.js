@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
+const Post = require("../models/post")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -110,5 +111,29 @@ router.post("/login", async(req, res) => {
   res.send({
     message: "succes"
   })
+})
+
+router.post("/post", async (req, res) => {
+  try{
+    const {title, content, imageUrl, userId} = req.body
+    const post = new Post({ title, content, user: userId})
+
+    //check if the image exists
+    if(imageUrl) post.imageUrl = imageUrl;
+
+    await post.save()
+
+    await User.findByIdAndUpdate(userId, {$push: {posts: post._id}})
+
+    res.status(201).json({
+      message: "Post created successfully", post
+    })
+  }
+  catch(error) {
+    console.error("Error on creating post: ", error)
+    res.status(500).json({
+      message: "Internal server error"
+    })
+  }
 })
 module.exports = router;
