@@ -5,13 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Emitters } from '../../emitters/emitter';
 import { Post} from '../post-model/post'
-import { PostService } from '../../services/post.service';
 import { PostModelComponent } from '../post-model/post-model.component';
 
 @Component({
   selector: 'app-feed',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, CommonModule, PostModelComponent],
+  imports: [FormsModule, HttpClientModule, CommonModule],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.scss'
 })
@@ -24,7 +23,6 @@ export class FeedComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router : Router,
-    private postService : PostService
   ) {}
 
   ngOnInit(): void {
@@ -44,9 +42,12 @@ export class FeedComponent implements OnInit {
         }
       );
 
-      this.http.get('http//localhost:3000/api/post',{withCredentials: true})
+      this.http.get('http://localhost:3000/api/getPosts',{withCredentials: true})
       .subscribe(
-        (res:any) => {
+        (res : any) => {
+          res.forEach((item: Post) => {
+            this.posts.push(item)
+          });
           console.log(res);
         },
         (err) => {
