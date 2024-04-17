@@ -55,8 +55,9 @@ router.get("/user",async (req, res) => {
     const claims = jwt.verify(cookie, "secret")
 
     if(!claims){
+      //console.log(claims);
       return res.status(401).send({
-        message:  "unauthenticated"
+        message:  "unauthenticated1"
       })
     }
 
@@ -66,6 +67,7 @@ router.get("/user",async (req, res) => {
 
     res.send(data)
   } catch (err){
+    console.log(err);
       return res.status(401).send({
         message:  "unauthenticated"
       })
@@ -139,7 +141,8 @@ router.post("/post", async (req, res) => {
 
 router.get("/getPosts", async(req, res)=>{
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().populate('user', 'firstName lastName country')
+
     res.json(posts);
   } catch (error) {
     console.error(error);

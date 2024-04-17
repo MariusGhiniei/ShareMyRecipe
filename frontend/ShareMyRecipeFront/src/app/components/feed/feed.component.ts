@@ -4,8 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Emitters } from '../../emitters/emitter';
-import { Post} from '../post-model/post'
-import { PostModelComponent } from '../post-model/post-model.component';
+import { Post} from '../post/post'
+
 
 @Component({
   selector: 'app-feed',
@@ -42,11 +42,36 @@ export class FeedComponent implements OnInit {
         }
       );
 
-      this.http.get('http://localhost:3000/api/getPosts',{withCredentials: true})
+      this.http.get<any[]>('http://localhost:3000/api/getPosts',{withCredentials: true})
       .subscribe(
-        (res : any) => {
-          res.forEach((item: Post) => {
-            this.posts.push(item)
+        (res : any[]) => {
+          res.forEach((postItem: any) => {
+            console.log(postItem);
+
+            const post = postItem.post
+            const user = postItem.user
+
+            if(post && user){
+              const { title, content, imageUrl } = post;
+              const { firstName, lastName, country } = user;
+        
+            const data : Post = {
+              _id : postItem._id,
+              post: {
+                title: title,
+                content: content,
+                imageUrl: imageUrl
+              },
+              user: {
+                firstName: firstName,
+                lastName: lastName,
+                country: country
+              }
+            }
+            this.posts.push(data)
+          } else {console.error("Imcomplete post data: ", postItem);}
+
+            
           });
           console.log(res);
         },

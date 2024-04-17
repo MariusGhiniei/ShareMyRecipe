@@ -1,7 +1,12 @@
 <div class="container text-center">
     <h2>Welcome to Feed Page </h2>
-        <b style ="color: violet" >{{posts[2].content}}</b> <br>
-        <b style ="color: red" >{{posts[2].title}}</b> <br>
-        <b style ="color: green" >{{posts[2].user._id}}</b>
+    <div *ngFor="let post of posts">
+        <b style ="color: violet" >{{post.post.content}}</b> <br>
+        <b style ="color: red" >{{post.post.title}}</b> <br>
+        <b style ="color: green"> {{post.post.imageUrl}}</b>
+        <b style ="color: yellow">{{post.user.firstName}} {{post.user.lastName}} {{post.user.country}}</b>
+    </div>
+        
+        
    <!--<app-post-model *ngFor="let post of posts" [post]="post"></app-post-model>   -->
 </div>
