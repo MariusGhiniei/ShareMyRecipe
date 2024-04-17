@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, NgModule, OnInit} from '@angular/core';
-import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, FormsModule, ValidationErrors, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router'
 import { Emitters } from '../../emitters/emitter';
 import { CommonModule } from '@angular/common';
@@ -17,6 +17,8 @@ import Swal from 'sweetalert2'
 export class PostComponent implements OnInit {
   showForm = true
   authenticated = false
+
+  postForm: FormGroup
   postData = {
     title: '',
     content: '',
@@ -25,7 +27,8 @@ export class PostComponent implements OnInit {
 
   constructor(
     private http:HttpClient,
-     private router: Router
+    private router: Router,
+    private fb: FormBuilder
      ){}
 
   ngOnInit(): void {
@@ -41,13 +44,39 @@ export class PostComponent implements OnInit {
         Emitters.authEmitter.emit(false)
       }
     );
+
+    this.postForm = this.fb.group({
+      title:['', Validators.required],
+      content: ['', Validators.required],
+      image: [null, [this.validateImageFileType]]
+    })
   }
 
+  validateImageFileType(control: AbstractControl) : ValidationErrors | null {
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
+    if (control.value) {
+      const fileExtension = control.value.split('.').pop().toLowerCase();
+      if (allowedExtensions.indexOf('.' + fileExtension) === -1) {
+        return { invalidImageType: true };
+      }
+    }
+    return null;
+  }
+
+  onFileChange(event: Event): void {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files.length > 0) {
+      this.postForm.get('image')?.setValue(fileInput.files[0]);
+    }
+  }
+  
+
   onSubmit(){
-    if(!this.postData.title || !this.postData.content){
+    if(!this.postForm.valid){
       Swal.fire("Error", "Title or content are required", "error")
       return
     }
+    this.postData = this.postForm.value
     this.http.post<any>('http://localhost:3000/api/post', this.postData, {withCredentials : true})
     .subscribe(res => {
       console.log('Post created successfully', res);
@@ -58,6 +87,8 @@ export class PostComponent implements OnInit {
       })
     }, error => {
       console.error('Error creating post', error);
+      Swal.fire("Error", "An error occurred while creating the post. Please try again later.", "error");
+     
     })
   }
 }

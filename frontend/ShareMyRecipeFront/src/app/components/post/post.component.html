@@ -1,21 +1,21 @@
 <div class="container" *ngIf="showForm">
-    <h2>Create a New Post</h2>
-    <form #postForm="ngForm">
-      <div class="form-group">
-        <label for="title">Title:</label>
-        <input type="text" class="form-control" id="title" name="title" [(ngModel)]="postData.title" required>
-      </div>
-      <div class="form-group">
-        <label for="content">Content:</label>
-        <textarea class="form-control" id="content" name="content" [(ngModel)]="postData.content" required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="imageUrl">Image URL:</label>
-        <input type="text" class="form-control" id="imageUrl" name="imageUrl" [(ngModel)]="postData.imageUrl">
-      </div>
-      <button type="submit" (click)="onSubmit()" class="btn btn-primary">Submit</button>
-    </form>
-  </div>
+  <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" class="form-control" id="title" formControlName="title">
+     </div>
+    <div class="form-group">
+      <label for="content">Content</label>
+      <textarea class="form-control" id="content" formControlName="content" rows="4"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="image">Image (JPG, PNG, JPEG, GIFs only)</label>
+      <input type="file" class="form-control" id="image" formControlName="image" >
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="!postForm.valid">Submit</button>
+  </form>
+  
+  
 <div class="container" *ngIf="!showForm">
     <h2>You are not Logged in</h2>
 </div>
