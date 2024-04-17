@@ -16,6 +16,7 @@ import Swal from 'sweetalert2'
 })
 export class PostComponent implements OnInit {
   showForm = true
+  authenticated = false
   postData = {
     title: '',
     content: '',
@@ -29,23 +30,25 @@ export class PostComponent implements OnInit {
 
   ngOnInit(): void {
     this.http.get('http://localhost:3000/api/user', { withCredentials: true })
-      .subscribe(
-        (res: any) => {
-          if (res.firstName) {
-            Emitters.authEmitter.emit(true)
-          } else {
-            this.showForm = false
-          }
-        },
-        (err) => {
-          console.error("Error:", err);
-          Emitters.authEmitter.emit(false)
-        }
-      );
+    .subscribe(
+      (res: any) => {
+        if (res) {
+          Emitters.authEmitter.emit(true)
+        } 
+      },
+      (err) => {
+        console.error("Error nav/post:", err);
+        Emitters.authEmitter.emit(false)
+      }
+    );
   }
 
   onSubmit(){
-    this.http.post<any>('http://localhost:3000/api/post', this.postData)
+    if(!this.postData.title || !this.postData.content){
+      Swal.fire("Error", "Title or content are required", "error")
+      return
+    }
+    this.http.post<any>('http://localhost:3000/api/post', this.postData, {withCredentials : true})
     .subscribe(res => {
       console.log('Post created successfully', res);
       Swal.fire({
@@ -53,7 +56,6 @@ export class PostComponent implements OnInit {
         text:"You post has been made successfully",
         icon: "success"
       })
-      this.router.navigate(['/'])
     }, error => {
       console.error('Error creating post', error);
     })

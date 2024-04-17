@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
-
 @Component({
   selector: 'app-login',
   standalone: true,

@@ -1,10 +1,10 @@
-<div class="container text-center">
+<div class="container text-center" *ngIf="showPost">
     <h2>Welcome to Feed Page </h2>
     <div *ngFor="let post of posts">
-        <b style ="color: violet" >{{post.post.content}}</b> <br>
-        <b style ="color: red" >{{post.post.title}}</b> <br>
-        <b style ="color: green"> {{post.post.imageUrl}}</b>
-        <b style ="color: yellow">{{post.user.firstName}} {{post.user.lastName}} {{post.user.country}}</b>
+        <b style ="color: violet" >{{post.title}}</b> <br>
+        <b style ="color: red" >{{post.content}}</b> <br>
+        <b style ="color: green"> {{post.imageUrl}}</b> <br>
+        <b style ="color: purple">{{post.firstName}} {{post.lastName}} {{post.country}}</b>
     </div>
         
         

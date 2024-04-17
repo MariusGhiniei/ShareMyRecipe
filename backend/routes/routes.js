@@ -5,6 +5,8 @@ const Post = require("../models/post")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const jwtToken = ''
+
 router.post("/register", async (req, res) => {
   try {
     let { firstName, lastName, country, email, password } = req.body;
@@ -50,28 +52,39 @@ router.post("/register", async (req, res) => {
 
 router.get("/user",async (req, res) => {
   try{
-    const cookie = req.cookies['jwt']
+    const token = req.cookies.jwt
 
-    const claims = jwt.verify(cookie, "secret")
+    if(!token){
+      return res.status(401).json({ message: "Unauthorized token" })
+    }
+    res.cookie('token',req.cookies.jwt, {
+      httpOnly: true,
+       maxAge: 3*24*60*60*1000
+    })
+    const decryptToken = await jwt.verify(token, "secret")
 
-    if(!claims){
-      //console.log(claims);
-      return res.status(401).send({
-        message:  "unauthenticated1"
-      })
+    if(!decryptToken){
+      return res.status(401).json({ message: "Unauthorized decrypted" });
     }
 
-    const user = await User.findOne({_id:claims._id})
+    //jwt token its valid
 
-    const{password,...data} = await user.toJSON()
+    const user = await User.findOne({ _id: decryptToken._id})
+    
+    if(!user){
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    res.send(data)
-  } catch (err){
-    console.log(err);
-      return res.status(401).send({
-        message:  "unauthenticated"
-      })
+    const { password, ...userData} = user.toObject()
+    res.status(200).json(userData)
   }
+  catch(err){
+    console.error(err)
+    res.status(500).json({
+      message : "Interval server error"
+    })
+  }
+    
 })
 
 router.post("/logout", (req,res) => {
@@ -117,7 +130,21 @@ router.post("/login", async(req, res) => {
 
 router.post("/post", async (req, res) => {
   try{
-    const {title, content, imageUrl, userId} = req.body
+    const token = req.cookies.jwt
+    if(!token){
+      return res.status(401).json({
+        message : "Unauthorized"
+      })
+    }
+
+    const decryptedToken = jwt.verify(token, "secret")
+    const userId = decryptedToken._id
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const {title, content, imageUrl} = req.body
     const post = new Post({ title, content, user: userId})
 
     //check if the image exists
@@ -141,12 +168,29 @@ router.post("/post", async (req, res) => {
 
 router.get("/getPosts", async(req, res)=>{
   try {
-    const posts = await Post.find().populate('user', 'firstName lastName country')
+    const posts = await Post.find().populate({
+      path: 'user',
+      select: '-password'
+    }).exec()
+    console.log(posts);
 
-    res.json(posts);
+    if(!posts || posts.length === 0){
+      return res.status(404).json({ message: "No posts found" })
+    }
+
+    const formatPosts = posts.map(post => ({
+      title : post.title,
+      content : post.content,
+      imageUrl : post.imageUrl,
+      firstName : post.user.firstName,
+      lastName : post.user.lastName,
+      country : post.user.country
+    }))
+
+    res.status(200).json(formatPosts)
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" })
   }
 })
 module.exports = router;

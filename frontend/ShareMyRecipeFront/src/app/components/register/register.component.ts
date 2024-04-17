@@ -4,7 +4,6 @@ import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
 
-
 @Component({
   selector: 'app-register',
   standalone: true,

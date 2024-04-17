@@ -17,8 +17,10 @@ import { Post} from '../post/post'
 export class FeedComponent implements OnInit {
   showPost = true
   user : any
+  details = { firstName: '', lastName: '', country: '' } as { firstName: string, lastName: string, country: string };
 
-  posts: Post[] = []
+
+  posts: any
 
   constructor(
     private http: HttpClient,
@@ -30,8 +32,17 @@ export class FeedComponent implements OnInit {
       .subscribe(
         (res: any) => {
           if (res.firstName) {
+            //console.log(res);
             Emitters.authEmitter.emit(true)
-            this.user = res
+            this.details = { 
+              firstName : res.firstName,
+              lastName : res.lastName,
+              country : res.country
+            } 
+            // this.user.firstName = res.firstName
+            // this.user.lastName = res.lastName
+            // this.user.country = res.country
+            this.getPostInfo()
           } else {
             this.showPost = false
           }
@@ -41,44 +52,21 @@ export class FeedComponent implements OnInit {
           Emitters.authEmitter.emit(false)
         }
       );
-
-      this.http.get<any[]>('http://localhost:3000/api/getPosts',{withCredentials: true})
+  }
+  getPostInfo(): void {
+      this.http.get('http://localhost:3000/api/getPosts', {withCredentials: true})
       .subscribe(
-        (res : any[]) => {
-          res.forEach((postItem: any) => {
-            console.log(postItem);
-
-            const post = postItem.post
-            const user = postItem.user
-
-            if(post && user){
-              const { title, content, imageUrl } = post;
-              const { firstName, lastName, country } = user;
-        
-            const data : Post = {
-              _id : postItem._id,
-              post: {
-                title: title,
-                content: content,
-                imageUrl: imageUrl
-              },
-              user: {
-                firstName: firstName,
-                lastName: lastName,
-                country: country
-              }
-            }
-            this.posts.push(data)
-          } else {console.error("Imcomplete post data: ", postItem);}
-
-            
-          });
-          console.log(res);
+        (posts) => {
+          console.log(posts);
+          this.posts = posts
+          
         },
         (err) => {
           console.error("error", err);
         }
       )
+
+     
   }
 
 }
