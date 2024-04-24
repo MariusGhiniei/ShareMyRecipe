@@ -149,6 +149,7 @@ router.post("/post", async (req, res) => {
 
     //check if the image exists
     if(imageUrl) post.imageUrl = imageUrl;
+    console.log(imageUrl);
 
     await post.save()
 

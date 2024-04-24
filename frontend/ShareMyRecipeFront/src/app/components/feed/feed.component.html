@@ -3,8 +3,7 @@
     <div *ngFor="let post of posts">
         <div class="col mb-4">
             <div class="card h-100 border border-purple rounded">
-              <img src="https://scontent.cdninstagram.com/v/t51.29350-15/426972018_714779424096601_7129223303731469760_n.jpg
-              " class="card-img-top" alt="..." >
+              <img src="{{post.imageUrl}}" class="card-img-top maxImg" alt="..." >
               <div class="card-body">
                 <h5 class="card-title font-weight-bold">{{ post.title }}</h5>
                 <p class="card-text font-raleway">{{ post.content }}</p>

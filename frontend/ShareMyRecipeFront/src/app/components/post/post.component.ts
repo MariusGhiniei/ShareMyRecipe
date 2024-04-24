@@ -48,27 +48,11 @@ export class PostComponent implements OnInit {
     this.postForm = this.fb.group({
       title:['', Validators.required],
       content: ['', Validators.required],
-      image: [null, [this.validateImageFileType]]
+      imageUrl: [null]
     })
   }
 
-  validateImageFileType(control: AbstractControl) : ValidationErrors | null {
-    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
-    if (control.value) {
-      const fileExtension = control.value.split('.').pop().toLowerCase();
-      if (allowedExtensions.indexOf('.' + fileExtension) === -1) {
-        return { invalidImageType: true };
-      }
-    }
-    return null;
-  }
-
-  onFileChange(event: Event): void {
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files && fileInput.files.length > 0) {
-      this.postForm.get('image')?.setValue(fileInput.files[0]);
-    }
-  }
+ 
   
 
   onSubmit(){
@@ -85,6 +69,7 @@ export class PostComponent implements OnInit {
         text:"You post has been made successfully",
         icon: "success"
       })
+      
     }, error => {
       console.error('Error creating post', error);
       Swal.fire("Error", "An error occurred while creating the post. Please try again later.", "error");

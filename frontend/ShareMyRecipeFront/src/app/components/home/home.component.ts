@@ -2,17 +2,19 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Emitters } from '../../emitters/emitter';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit{
 
   message = ""
+  logged = false
 
   constructor(private http:HttpClient){}
 
@@ -23,6 +25,7 @@ export class HomeComponent implements OnInit{
           if (res.firstName) {
             this.message = `Hi ${res.firstName}`;
             Emitters.authEmitter.emit(true)
+            this.logged = true
           } else {
             this.message = "User data not available";
           }
@@ -30,6 +33,7 @@ export class HomeComponent implements OnInit{
         (err) => {
           console.error("Error:", err);
           this.message = "You are not logged in";
+          this.logged = false
           Emitters.authEmitter.emit(false)
         }
       );
