@@ -167,22 +167,34 @@ router.post("/post", async (req, res) => {
   }
 })
 
+const checkImage = async (url) => {
+  try {
+    const res = await fetch(url);
+    const buff = await res.blob();
+    return url
+  } catch (error) {
+    console.error('Error checking image:', error);
+    return false;
+  }
+};
+
 router.get("/getPosts", async(req, res)=>{
   try {
     const posts = await Post.find().populate({
       path: 'user',
       select: '-password'
     }).exec()
-    console.log(posts);
 
     if(!posts || posts.length === 0){
       return res.status(404).json({ message: "No posts found" })
     }
 
+    
+
     const formatPosts = posts.map(post => ({
       title : post.title,
       content : post.content,
-      imageUrl : post.imageUrl,
+      imageUrl : checkImage(post.imageUrl),
       firstName : post.user.firstName,
       lastName : post.user.lastName,
       country : post.user.country
