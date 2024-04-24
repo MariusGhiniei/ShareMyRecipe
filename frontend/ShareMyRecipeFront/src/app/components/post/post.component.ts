@@ -5,6 +5,7 @@ import { Router } from '@angular/router'
 import { Emitters } from '../../emitters/emitter';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2'
+import { timeInterval } from 'rxjs';
 
 
 @Component({
@@ -69,6 +70,11 @@ export class PostComponent implements OnInit {
         text:"You post has been made successfully",
         icon: "success"
       })
+
+      setTimeout(() => {
+        this.router.navigate(['/feed'])
+      }, 2000)
+     
       
     }, error => {
       console.error('Error creating post', error);

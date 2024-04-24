@@ -9,8 +9,8 @@
       <textarea class="form-control" id="content" formControlName="content" rows="4"></textarea>
     </div>
     <div class="form-group">
-      <label for="image">Image (JPG, PNG, JPEG, GIFs only)</label>
-      <input type="file" class="form-control" id="image" formControlName="imageUrl" >
+      <label for="image">Image URL(only valid links for image)</label>
+      <input type="text" class="form-control" id="image" formControlName="imageUrl" >
     </div>
     <button type="submit" class="btn btn-primary" [disabled]="!postForm.valid">Submit</button>
   </form>
@@ -18,4 +18,12 @@
   
 <div class="container" *ngIf="!showForm">
     <h2>You are not Logged in</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-2">
+          <button routerLink="/login" type="button" class="btn btn-primary btn-block">Login</button>
+        </div>
+        <div class="col-md-2">
+          <button routerLink="/register" type="button" class="btn btn-success btn-block">Register</button>
+        </div>
+    </div>
 </div>
