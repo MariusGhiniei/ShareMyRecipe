@@ -5,6 +5,8 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Emitters } from '../../emitters/emitter';
 import { CommonModule } from '@angular/common';
+import { PostComponent } from '../post/post.component';
+import { FeedComponent } from '../feed/feed.component';
 
 @Component({
   selector: 'app-nav',
@@ -13,6 +15,8 @@ import { CommonModule } from '@angular/common';
     NavComponent,
     LoginComponent,
     RegisterComponent,
+    PostComponent,
+    FeedComponent,
     RouterOutlet,
     RouterLink,
     CommonModule

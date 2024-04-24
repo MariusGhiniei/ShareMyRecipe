@@ -26,3 +26,32 @@
     max-height: 200px;
     width:auto;
   }
+
+  .text-purple{
+    color : rgb(133, 30, 133);
+    font-weight: bold;
+  }
+
+  .user-firstName{
+    color : darkcyan;
+    font-size: medium;
+  }
+
+  .user-lastName{
+    color : rgb(8, 139, 139);
+    font-size: medium;
+  }
+
+  .user-country{
+    color : rgb(118, 31, 31);
+    font-size : large;
+  }
+
+  .card-bordered{
+    border: 3px solid #6c63ff;
+    border-radius: 50px;
+  }
+
+  .card-shadow{
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  }

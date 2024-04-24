@@ -5,13 +5,15 @@ import { Router } from '@angular/router'
 import { Emitters } from '../../emitters/emitter';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2'
-import { timeInterval } from 'rxjs';
 
 
 @Component({
   selector: 'app-post',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, 
+    HttpClientModule, 
+    CommonModule,
+     ReactiveFormsModule],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss'
 })

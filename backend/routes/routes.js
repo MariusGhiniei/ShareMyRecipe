@@ -194,7 +194,7 @@ router.get("/getPosts", async(req, res)=>{
     const formatPosts = posts.map(post => ({
       title : post.title,
       content : post.content,
-      imageUrl : checkImage(post.imageUrl),
+      imageUrl : post.imageUrl,
       firstName : post.user.firstName,
       lastName : post.user.lastName,
       country : post.user.country

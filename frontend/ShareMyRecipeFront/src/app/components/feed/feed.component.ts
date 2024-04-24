@@ -4,9 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Emitters } from '../../emitters/emitter';
-import { Post} from '../post/post'
-
-
 @Component({
   selector: 'app-feed',
   standalone: true,
@@ -17,22 +14,25 @@ import { Post} from '../post/post'
 export class FeedComponent implements OnInit {
   showPost = true
   user : any
+  authentificated = false
   details = { firstName: '', lastName: '', country: '' } as { firstName: string, lastName: string, country: string };
 
 
   posts: any
+  
 
   constructor(
     private http: HttpClient,
-    private router : Router,
+    private router : Router
   ) {}
 
   ngOnInit(): void {
     this.http.get('http://localhost:3000/api/user', { withCredentials: true })
       .subscribe(
         (res: any) => {
+          console.log(res);
           if (res.firstName) {
-            //console.log(res);
+            this.user = res.firstName
             Emitters.authEmitter.emit(true)
             this.details = { 
               firstName : res.firstName,
@@ -66,5 +66,5 @@ export class FeedComponent implements OnInit {
         }
       ) 
   }
-  
+
 }

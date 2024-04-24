@@ -1,6 +1,27 @@
 <div class="container text-center" *ngIf="showPost">
-    <h2>Welcome to Feed Page </h2>
-    <div *ngFor="let post of posts">
+    <h2>Welcome to Feed Page 
+      <span class ="text-purple">
+        {{ user}}
+      </span>
+    </h2>
+
+    <div class="container" *ngFor = "let post of posts">
+      <div class="card card-bordered card-shadow mb-3">
+        <div class="card-body">
+          <h5 class="card-title">{{ post.title }}</h5>
+          <p class="card-text">{{ post.content }}</p>
+          <p class="card-text">
+            <small class="text-muted"> by 
+              <small class="user-firstName"> {{ post.firstName }} </small>
+              <small class="user-lastName"> {{ post.lastName }} </small>
+              from <small class="user-country">{{ post.country }}</small>
+            </small>
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- <div *ngFor="let post of posts">
         <div class="col mb-4">
             <div class="card h-100 border border-purple rounded">
               <img src="{{post.imageUrl}}" class="card-img-top maxImg" alt="..." >
@@ -15,7 +36,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         
         
    <!--<app-post-model *ngFor="let post of posts" [post]="post"></app-post-model>   -->
