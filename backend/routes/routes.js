@@ -4,6 +4,7 @@ const User = require("../models/user");
 const Post = require("../models/post")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const user = require("../models/user");
 
 const jwtToken = ''
 
@@ -61,6 +62,7 @@ router.get("/user",async (req, res) => {
       httpOnly: true,
        maxAge: 3*24*60*60*1000
     })
+
     const decryptToken = await jwt.verify(token, "secret")
 
     if(!decryptToken){
@@ -123,6 +125,11 @@ router.post("/login", async(req, res) => {
     maxAge: 3*24*60*60*1000
   })
 
+  res.cookie("email", user.email,{
+    httpOnly: true,
+    maxAge: 3 * 24 * 60 * 60 * 1000
+  })
+
   res.send({
     message: "succes"
   })
@@ -131,6 +138,7 @@ router.post("/login", async(req, res) => {
 router.post("/post", async (req, res) => {
   try{
     const token = req.cookies.jwt
+    const email = req.cookies.email
     if(!token){
       return res.status(401).json({
         message : "Unauthorized"
@@ -145,7 +153,7 @@ router.post("/post", async (req, res) => {
     }
 
     const {title, content, imageUrl} = req.body
-    const post = new Post({ title, content, user: userId})
+    const post = new Post({ title, content, user: userId, email: email})
 
     //check if the image exists
     if(imageUrl) post.imageUrl = imageUrl;
@@ -177,8 +185,6 @@ router.get("/getPosts", async(req, res)=>{
     if(!posts || posts.length === 0){
       return res.status(404).json({ message: "No posts found" })
     }
-
-    
 
     const formatPosts = posts.map(post => ({
       title : post.title,
@@ -249,8 +255,92 @@ router.put('/updateUser', async (req, res) => {
     console.error('Error updating user:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
-  
-  
 })
+
+router.delete("/deleteUser", async (req, res) => {
+  try {
+    const { email } = req.body;
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    await user.deleteOne();
+    await Post.deleteMany({email})
+
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+router.get("/getContent", async (req, res) => {
+    try {
+      const posts = await Post.find().populate({
+        path: 'user',
+        select: '-password'
+      }).exec()
+  
+      if(!posts || posts.length === 0){
+        return res.status(404).json({ message: "No posts found" })
+      }
+      const token = await req.cookies.jwt;
+      const tokenEmail = await req.cookies.email;
+      
+
+      if (!token) {
+        return res.status(401).json({ message: 'Unauthorized token' });
+      }
+  
+      const decryptToken = jwt.verify(token, 'secret');
+  
+      if (!decryptToken) {
+        return res.status(401).json({ message: 'Unauthorized decrypted' });
+      }
+  
+      const userId = decryptToken
+      
+      const formatPosts = posts.filter(post => post.user.email === tokenEmail).map(post => ({
+        email : post.user.email,
+        title : post.title,
+        content : post.content,
+        imageUrl : post.imageUrl,
+        firstName : post.user.firstName,
+        lastName : post.user.lastName,
+        country : post.user.country
+      }))
+
+      res.status(200).json(formatPosts)
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" })
+    }
+})
+
+router.put('/updatePost', async (req, res) => {
+  try {
+    
+    const { postId, title, content } = req.body;
+    console.log(postId);
+    let post = await Post.findById(postId);
+    
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    
+    post.title = title;
+    post.content = content;
+    
+    await post.save();
+    
+    res.status(200).json({ message: 'Post updated successfully', post });
+  } catch (error) {
+    console.error('Error updating post:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 module.exports = router;

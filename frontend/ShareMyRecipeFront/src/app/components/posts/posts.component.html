@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="profile-card">
+      <div class="card" *ngFor="let post of posts">
+        <div class="card-body">
+          <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" class="form-control" [disabled]="!isEditing(post)" [(ngModel)]="post.title">
+          </div>
+          <div class="form-group">
+            <label for="content">Content:</label>
+            <textarea id="content" class="form-control" [disabled]="!isEditing(post)" [(ngModel)]="post.content" ></textarea>
+          </div>
+          <button type="button" class="btn btn-primary" (click)="editPost(post)">Edit</button>
+          <button type="button" class="btn btn-primary" style="margin-left:20px; margin-top:5px;" *ngIf="editingSubmit && isEditing(post)" (click)="updatePost(post)">Update Post</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

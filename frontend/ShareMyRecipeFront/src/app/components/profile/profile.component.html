@@ -29,6 +29,7 @@
             </div>
             <button type="button" class="btn btn-success" style="margin-top:5px;" (click)="validatePassword()">Submit</button>
             <button type="button" class="btn btn-primary" style="margin-left:20px; margin-top:5px;" *ngIf="editingSubmit" (click)="updateUser()">Update User</button>
+            <button type="button" class="btn btn-danger" style="margin-left:20px; margin-top:5px;" *ngIf="editingSubmit" (click)="deleteUser(user.email)">Delete User</button>
 
           </div>
         </div>

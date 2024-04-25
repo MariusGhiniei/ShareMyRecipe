@@ -5,6 +5,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { PostComponent } from './components/post/post.component';
 import { FeedComponent } from './components/feed/feed.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { PostsComponent } from './components/posts/posts.component';
 
 
 export const routes: Routes = [
@@ -32,5 +33,9 @@ export const routes: Routes = [
     {
         path : 'profile',
         component : ProfileComponent
+    },
+    {
+        path : 'posts',
+        component : PostsComponent
     }
 ];

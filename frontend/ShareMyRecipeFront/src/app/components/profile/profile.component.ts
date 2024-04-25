@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import * as bcrypt from 'bcryptjs'
 import Swal from 'sweetalert2'
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -91,6 +92,18 @@ export class ProfileComponent implements OnInit{
         console.error("Error on updating user: ", err);
       }
     )
+  }
+
+  async deleteUser(email: string): Promise<any> {
+    try {
+      const response = await this.http.delete<any>('http://localhost:3000/api/deleteUser', { body: { email } }).toPromise();
+      console.log('User deleted successfully:', response);
+      Swal.fire("Succes",'User deleted!', "success")
+      return response;
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      throw error;
+    }
   }
 
 }
