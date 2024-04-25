@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="profile-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">
+            <span class="user-country">{{user.firstName}}'s</span> profile
+          </div>
+          <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" class="form-control" [disabled]="!editing" [(ngModel)]="user.firstName">
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" class="form-control" [disabled]="!editing" [(ngModel)]="user.lastName">
+          </div>
+          <div class="form-group">
+            <label for="country">Country:</label>
+            <input type="text" id="country" class="form-control" [disabled]="!editing" [(ngModel)]="user.country">
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" class="form-control" disabled [(ngModel)]="user.email">
+          </div>
+          <button type="button" class="btn btn-primary" style="margin-top:5px;" (click)="editMode()">Edit</button>
+          <div *ngIf="editing">
+            <div class="form-group">
+              <label for="password">Enter Password:</label>
+              <input type="password" id="password" class="form-control" [(ngModel)]="password">
+            </div>
+            <button type="button" class="btn btn-success" style="margin-top:5px;" (click)="validatePassword()">Submit</button>
+            <button type="button" class="btn btn-primary" style="margin-left:20px; margin-top:5px;" *ngIf="editingSubmit" (click)="updateUser()">Update User</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

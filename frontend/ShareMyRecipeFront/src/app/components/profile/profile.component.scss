@@ -1,0 +1,29 @@
+.user-country{
+    color : rgb(118, 31, 31);
+    font-size : large;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40vh; /* Adjust to your preference */
+    margin-top: 20vh;
+  }
+  
+  .profile-card {
+    max-width: 400px; /* Adjust to your preference */
+    width: 100%;
+  }
+
+  .card{
+    border: 3px solid purple;
+    border-radius: 50px;
+  }
+  .card-title{
+    margin-bottom: 30px;
+    
+  }
+  

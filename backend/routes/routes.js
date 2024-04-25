@@ -52,7 +52,7 @@ router.post("/register", async (req, res) => {
 
 router.get("/user",async (req, res) => {
   try{
-    const token = req.cookies.jwt
+    const token = await req.cookies.jwt
 
     if(!token){
       return res.status(401).json({ message: "Unauthorized token" })
@@ -167,17 +167,6 @@ router.post("/post", async (req, res) => {
   }
 })
 
-const checkImage = async (url) => {
-  try {
-    const res = await fetch(url);
-    const buff = await res.blob();
-    return url
-  } catch (error) {
-    console.error('Error checking image:', error);
-    return false;
-  }
-};
-
 router.get("/getPosts", async(req, res)=>{
   try {
     const posts = await Post.find().populate({
@@ -206,4 +195,62 @@ router.get("/getPosts", async(req, res)=>{
     res.status(500).json({ message: "Internal server error" })
   }
 })
+
+router.get('/profile', async (req, res) => {
+  try {
+    const token = req.cookies.jwt;
+
+    if (!token) {
+      return res.status(401).json({ message: 'Unauthorized token' });
+    }
+
+    const decryptToken = jwt.verify(token, 'secret');
+
+    if (!decryptToken) {
+      return res.status(401).json({ message: 'Unauthorized decrypted' });
+    }
+
+    // JWT token is valid
+    const user = await User.findOne({ _id: decryptToken._id });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(user.toObject());
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+router.put('/updateUser', async (req, res) => {
+  try{
+    const {firstName, lastName, country, email} = req.body
+    let user = await User.findOne({email})
+
+    if(!user){
+      return res.status(404).json({
+        message: 'User not found'
+      })
+    }
+
+    user.firstName = firstName
+    user.lastName = lastName
+    user.email = email
+    user.country = country
+
+    await user.save()
+
+    res.status(200).json({
+      message : 'User updated successfully', user
+    })
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+  
+  
+})
+
 module.exports = router;
